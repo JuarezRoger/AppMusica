@@ -1,0 +1,41 @@
+{% extends 'music/base.html' %}
+
+
+{% block title %} {{album.name}}album - Music App {% endblock  %}
+    
+
+
+{% block container %}
+    <div class="row mt-4">
+        <div class="col-lg-3">
+            <img with="100%" src="/media/{{album.cover}}" alt="{{album.name}}" class="img-thumbnail">
+
+
+            <div class="mt-3">
+                <p class="text-monospace text-success">
+                    {{album.track_set.count}} canciones
+                </p>
+                <p class="font-weight-bold">{{album.name}}</p>
+                <p>Artista: {{album.artist}}</p>
+                <p>Genero: {{album.gender}}</p>
+            </div>
+        </div>
+    
+        <div class="col-lg-9">
+            <h3>Canciones del album</h3><hr>
+            
+            {% for track in album.track_set.all %}
+                <p class="pl-4">
+                    <strong>{{track.name}}</strong><br>
+                    {{track.player|safe}} <!-- Renderiza el reproductor de audio -->
+                </p>
+            {% empty %}
+                <p>
+                    There is not songs at the moment.
+                </p>
+            {% endfor %}
+                
+        </div>
+    </div>
+{% endblock %}
+    

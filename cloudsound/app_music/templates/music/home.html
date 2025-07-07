@@ -1,0 +1,38 @@
+{% extends 'music/base.html' %}
+
+{% block title %} Home - Music App {% endblock  %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Albumes agregados recientemente</h3>
+
+            <div class="row">
+                {% for album in albumes %}
+                <div class="col-lg-6 mb-3">
+                    {% if album.cover %}
+                        <a href="{% url 'cloudsound:album' album.id %}">
+                            <img width="100%" class="img-thumbnail" src="/media/{{ album.cover }}" alt="{{ album.name }}">
+                        </a> 
+                    {% else %}
+                        <div class="img-thumbnail d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span class="text-muted">Sin imagen</span>
+                        </div>
+                    {% endif %}
+                    <a href="#">{{ album.name }}</a> | <a href="#" class="text-success">{{ album.artist }}</a> | {{album.gender}}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">  
+            <h3>Artistas</h3>
+            <ul class="list-group">
+                {% for art in artist %}
+                    <li class="list-group-item">
+                        <a href="{% url 'cloudsound:artist' art.id %}">{{ art.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock  %}

@@ -1,0 +1,73 @@
+{% extends 'music/base.html' %}
+
+{% block title %}  
+
+    
+    {% if id == request.user.id %}
+        Mi perfil - CloudSound
+            
+    {% else %}
+        {{user.get_full_name}} - CloudSound
+        
+    {% endif %}
+        
+
+{% endblock  %}
+
+
+{% block container %}
+    <div class = "row">
+        <div class="col-lg-3 border" style="background-color:rgb(193, 214, 236);">
+            
+            {% if user %}
+                <img class="rounded-circle" width="100%" src="/media/{{ user.profile.avatar }}" alt="{{ user.profile.avatar }}" class="img-thumbnail">
+                <h3 class="text-center font-weight-bold">{{ user.get_full_name }}</h3>
+                <p class="bg-light p-2">{{user.profile.bio}}</p>
+            {% else %}
+                <img class="rounded-circle" width="100%" src="/media/{{ request.user.profile.avatar }}" alt="{{ request.user.profile.avatar }}" class="img-thumbnail">
+                <h3 class="text-center font-weight-bold">{{ request.user.get_full_name }}</h3>
+                <p class="bg-light p-2">{{request.user.profile.bio}}</p>
+            {% endif %}
+        </div>
+        <div class="col-lg-8 offset-lg-1">
+            {% if user %}
+                
+            {% else %}
+                <h3>Crear una lista de reproduccion</h3>
+                <form action="{% url 'cloudsound:playlist' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" name="playlist-name" class="form-control" placeholder="Playlist name" aria-label="Recipient’s username" aria-describedby="button-addon2">
+                        <button class="btn btn-success" type="submit" id="button-addon2">Crear Playlist</button>
+                    </div>
+                </form>
+
+                <h3>Mis listas de reproduccion</h3>
+                
+                <ul class="list-group">
+                    {% for pl in playlists %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-8">
+                                    <a href="" >{{pl.name}}</a>
+                                </div>
+
+                                <div class="col-4 text-end">
+                                    <a class="text-primary a-add-tracks" target="_blank" href="{% url 'cloudsound:add_tracks_views' pl.id %}">Agregar</a>&nbsp;&nbsp;&nbsp;
+                                    <a data-id="{{pl.id}}" data-url="{% url 'cloudsound:playlist' %}" class="text-danger a-remove-pl" href="">Remover</a>&nbsp;&nbsp;&nbsp;
+                                    <a class="text-success" href="">Compartir</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">
+                            No tienes listas de reproduccion.
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+                
+{% endblock  %}
+    
